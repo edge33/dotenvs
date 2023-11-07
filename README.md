@@ -7,13 +7,15 @@ Install the required fonts
 apple-fonts (AUR)
 ttf-jetbrains-mono (Arch)
 
-pacman -S ttf-jetbrains-mono
+```bash
+pacman -S ttf-jetbrains-mono ttf-dejavu ttf-liberation noto-fonts
 yay -S apple-fonts
-sudo pacman -S ttf-dejavu ttf-liberation noto-fonts
+```
 
-move local.conf to /etc/fonts/local.conf
-then
+move `local.conf` to `/etc/fonts/local.conf`
+
+```
 fc-cache
-
+```
 
 install Meslo NG for powerlevel10k
