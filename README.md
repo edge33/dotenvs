@@ -32,7 +32,7 @@ sudo dnf install liberation-fonts
 
 ```
 
-move `local.conf` to `/etc/fonts/local.conf`
+move `fonts/fonts.conf` to `~/.config/fontconfig/fonts.conf`
 
 ```
 fc-cache
