@@ -16,9 +16,17 @@ if ! command -v git >/dev/null 2>&1; then
   exit 1
 fi
 
-repo_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
+script_path=$(cd -- "$(dirname -- "$0")" && pwd)/$(basename -- "$0")
+repo_dir=$(cd -- "$(dirname -- "$script_path")/.." && pwd)
 font_dir="$HOME/.local/share/fonts"
 backup_dir="$HOME/.local/share/dotenvs-backups/$(date +%Y%m%d-%H%M%S)"
+
+# Start in Bash on a fresh install, then run the rest of this file in Zsh.
+if [[ -z ${ZSH_VERSION:-} ]]; then
+  echo 'Installing Zsh and switching the setup to it...'
+  sudo pacman -Syu --needed --noconfirm curl zsh
+  exec zsh -f "$script_path"
+fi
 
 install_config() {
   local source=$1 target=$2
@@ -32,38 +40,8 @@ install_config() {
   install -Dm644 -- "$source" "$target"
 }
 
-# nvm's installer adds its startup lines to .zshrc. Compare against that final
-# form so rerunning the setup does not replace .zshrc or create another backup.
-install_zshrc() {
-  local source="$repo_dir/.zshrc" target="$HOME/.zshrc"
-  if [[ -f $target ]] && cmp -s <(
-    cat "$source"
-    printf '\nexport NVM_DIR="%s"\n[ -s "$NVM_DIR/nvm.sh" ] && \\. "$NVM_DIR/nvm.sh"  # This loads nvm\n[ -s "$NVM_DIR/bash_completion" ] && \\. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion\n' "$nvm_profile_dir"
-  ) "$target"; then
-    return
-  fi
-  install_config "$source" "$target"
-}
-
-if [[ -n ${NVM_DIR:-} ]]; then
-  nvm_dir=$NVM_DIR
-elif [[ -s $HOME/.config/nvm/nvm.sh ]]; then
-  nvm_dir="$HOME/.config/nvm"
-elif [[ -n ${XDG_CONFIG_HOME:-} ]]; then
-  nvm_dir="$XDG_CONFIG_HOME/nvm"
-else
-  nvm_dir="$HOME/.nvm"
-fi
-if [[ $nvm_dir == "$HOME"/* ]]; then
-  nvm_profile_dir="\$HOME/${nvm_dir#"$HOME"/}"
-else
-  nvm_profile_dir=$nvm_dir
-fi
-
-# Zsh and Zim go first so the shell is ready before development tools.
-echo 'Installing Zsh and Zim...'
-sudo pacman -Syu --needed --noconfirm curl zsh
-install_zshrc
+echo 'Installing Zim and shell configuration...'
+install_config "$repo_dir/.zshrc" "$HOME/.zshrc"
 install_config "$repo_dir/.zimrc" "$HOME/.zimrc"
 install_config "$repo_dir/.p10k.zsh" "$HOME/.p10k.zsh"
 zsh -ic 'zimfw install'
@@ -73,14 +51,14 @@ if [[ $(getent passwd "$current_user" | cut -d: -f7) != "$(command -v zsh)" ]]; 
 fi
 
 echo 'Installing nvm and Node.js LTS...'
-# Point nvm's installer at .zshrc even when the current login shell is Bash.
-if [[ ! -s $nvm_dir/nvm.sh ]] ||
-   ! grep -Fq '$NVM_DIR/nvm.sh' "$HOME/.zshrc" ||
-   [[ $(NVM_DIR=$nvm_dir bash -c 'source "$NVM_DIR/nvm.sh"; nvm --version') != 0.40.8 ]]; then
-  curl -o- --fail --silent --show-error https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.8/install.sh |
-    PROFILE="$HOME/.zshrc" NVM_DIR="$nvm_dir" bash
+export NVM_DIR="$HOME/.nvm"
+if [[ ! -s $NVM_DIR/nvm.sh ]]; then
+  if [[ -e $NVM_DIR ]]; then
+    echo "Existing $NVM_DIR does not contain nvm.sh; resolve it before retrying." >&2
+    exit 1
+  fi
+  git clone --depth 1 --branch v0.40.8 https://github.com/nvm-sh/nvm.git "$NVM_DIR"
 fi
-export NVM_DIR=$nvm_dir
 source "$NVM_DIR/nvm.sh"
 nvm install --lts
 if [[ ! -r $NVM_DIR/alias/default ]] || [[ $(<"$NVM_DIR/alias/default") != 'lts/*' ]]; then
