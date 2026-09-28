@@ -1,0 +1,8 @@
+{
+    "workbench.colorTheme": "Dark Modern",
+    "workbench.iconTheme": "material-icon-theme",
+    "editor.mouseWheelZoom": true,
+    "explorer.compactFolders": false,
+    "editor.fontFamily": "JetBrains Mono NL",
+    "terminal.integrated.fontFamily": "MesloLGS NF"
+}

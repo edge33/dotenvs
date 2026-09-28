@@ -1,56 +1,31 @@
 # dotenvs
 
-My personal dotenv files for Linux
+My Linux shell, font, terminal, and VS Code configuration.
 
-## fonts
+## New Arch installation
 
-### ARCH
-
-Install the required fonts
-apple-fonts (AUR)
-ttf-jetbrains-mono (Arch)
+Clone this repository and run the setup script as your regular user with sudo access:
 
 ```bash
-pacman -S ttf-jetbrains-mono ttf-dejavu ttf-liberation noto-fonts
-yay -S apple-fonts
+git clone https://github.com/edge33/dotenvs.git
+cd dotenvs
+bash scripts/setup-arch.sh
 ```
 
-### FEDORA
+If Git is not available yet, install it first with `sudo pacman -S git`. The script installs or updates Git, build tools, curl, Zsh, fontconfig, the Arch font packages, nvm, the latest Node.js LTS, yay, Apple fonts, and Visual Studio Code. It makes the latest LTS line the default for new shells, installs Zim and its modules including Powerlevel10k, installs the Material Icon Theme extension, and sets Zsh as the login shell.
 
-```
-mkdir ~/.local/share/fonts && cd ~/.local/share/fonts
-wget https://github.com/sahibjotsaggu/San-Francisco-Pro-Fonts/raw/master/SF-Pro-Display-Regular.otf
+The Arch fonts are `ttf-jetbrains-mono`, `ttf-dejavu`, `ttf-liberation`, and `noto-fonts` from the official repositories, plus `apple-fonts` from the AUR. The script also downloads all four [MesloLGS NF font files](https://github.com/romkatv/powerlevel10k-media) used by Powerlevel10k and the VS Code terminal. Configure any other terminal app to use `MesloLGS NF`.
 
-wget https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Regular.ttf
-wget https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold.ttf
-wget https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Italic.ttf
-wget https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold%20Italic.ttf
+The script copies `.zshrc`, `.zimrc`, `.p10k.zsh`, `fonts/fonts.conf`, and `vscode/settings.json` to your home configuration. It backs up differing existing files under `~/.local/share/dotenvs-backups/` before replacing them. You can rerun the script after pulling updates.
 
+The script installs `visual-studio-code-bin` and `apple-fonts` from the AUR. Review their PKGBUILDs before running it if you want to inspect third party packages.
 
-sudo dnf install dejavu-fonts-all
-sudo dnf install liberation-fonts
+## Other Linux distributions
 
-```
+Install Zsh, Git, curl, Node.js via [nvm](https://github.com/nvm-sh/nvm), Zim, and Powerlevel10k for your distribution. Copy `.zshrc`, `.zimrc`, and `.p10k.zsh` to your home directory, `fonts/fonts.conf` to `~/.config/fontconfig/fonts.conf`, and `vscode/settings.json` to `~/.config/Code/User/settings.json`.
 
-move `fonts/fonts.conf` to `~/.config/fontconfig/fonts.conf`
+Install JetBrains Mono, DejaVu, Liberation, Noto, and MesloLGS NF fonts. The four MesloLGS NF files are linked in the [Powerlevel10k font instructions](https://github.com/romkatv/powerlevel10k#manual-font-installation). Refresh fontconfig with `fc-cache -f` and set your terminal font to `MesloLGS NF`.
 
-```
-fc-cache
-```
+## GNOME shortcuts
 
-## ZSH
-
-move `.p10k.` zsh to `~/`,
-
-install Meslo fonts as per fonts section of this readme,
-
-configure the terminal app to use `MesloLGS NF` font
-
-install Meslo NG for powerlevel10k
-
-## Gnome settings
-
-in order to allow shortcuts in vscode like ctrl + shit + alt + up/down
-
-check if there are clashes with gnome shortcuts
-https://gitlab.gnome.org/GNOME/gnome-control-center/-/issues/1528
+If VS Code's Ctrl+Shift+Alt+Up/Down shortcuts clash with GNOME shortcuts, check the relevant GNOME settings. See [GNOME issue 1528](https://gitlab.gnome.org/GNOME/gnome-control-center/-/issues/1528).
