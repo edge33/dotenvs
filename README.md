@@ -12,17 +12,21 @@ cd dotenvs
 bash scripts/setup-arch.sh
 ```
 
-Git is required to clone the repository; if it is not available yet, install it first with `sudo pacman -S git`. The script installs curl and Zsh, switches its own execution to Zsh, and sets up Zim. It then clones nvm v0.40.8 into `~/.nvm`, installs the latest Node.js LTS, and makes that LTS line the default for new shells. It also installs build tools, fontconfig, the Arch font packages, yay, Apple fonts, Visual Studio Code, and the Material Icon Theme and Biome extensions. Zsh becomes the login shell.
+Git is required to clone the repository; if it is not available yet, install it first with `sudo pacman -S git`. The script installs curl and Zsh, switches its own execution to Zsh, and sets up Zim. It then clones nvm v0.40.8 into `~/.nvm`, installs the latest Node.js LTS, and makes that LTS line the default for new shells. It also installs build tools, fontconfig, the Arch font packages, yay, Apple fonts, Konsole, Visual Studio Code, and the Material Icon Theme and Biome extensions. Zsh becomes the login shell.
 
 The Arch fonts are `ttf-jetbrains-mono`, `ttf-dejavu`, `ttf-liberation`, `noto-fonts`, and `noto-fonts-emoji` from the official repositories, plus `apple-fonts` from the AUR. The script also downloads all four [MesloLGS NF font files](https://github.com/romkatv/powerlevel10k-media) used by Powerlevel10k and the VS Code terminal. Configure any other terminal app to use `MesloLGS NF`.
 
-The script copies `.zshrc`, `.zimrc`, `.p10k.zsh`, `.config/fontconfig/fonts.conf`, and `.config/Code/User/settings.json` to your home configuration. The versioned `.zshrc` loads nvm from `~/.nvm`. The script backs up differing existing files under `~/.local/share/dotenvs-backups/` before replacing them and skips unchanged files on later runs. You can rerun it after pulling updates.
+The script copies `.zshrc`, `.zimrc`, `.p10k.zsh`, `.config/fontconfig/fonts.conf`, `.config/Code/User/settings.json`, and `.local/share/konsole/SolarizedDark.profile` to your home configuration. The versioned `.zshrc` loads nvm from `~/.nvm`. The script backs up differing existing files under `~/.local/share/dotenvs-backups/` before replacing them and skips unchanged files on later runs. You can rerun it after pulling updates.
 
 The script installs `visual-studio-code-bin` and `apple-fonts` from the AUR. Review their PKGBUILDs before running it if you want to inspect third party packages.
 
 ## KDE Plasma fonts
 
 On Plasma 6, the script uses `kreadconfig6` and `kwriteconfig6` to set the [KDE font groups](https://github.com/KDE/plasma-workspace/blob/master/kcms/fonts/fontssettings.kcfg) in `~/.config/kdeglobals`. General, menu, toolbar, and small text use SF Pro Text; window titles use SF Pro Display; fixed-width text uses JetBrains Mono. Existing sizes and styles are retained. The fontconfig file handles serif and emoji preferences. Log out and back in to apply changes to the Plasma session. The script skips this step when Plasma is not installed.
+
+## Konsole
+
+The script installs a [Konsole profile](.local/share/konsole/SolarizedDark.profile) using Konsole's built-in `Solarized` dark color scheme and MesloLGS NF at 12 pt. It sets this profile as Konsole's default in `konsolerc`, leaving other settings and profiles in place. The profile is copied to `${XDG_DATA_HOME:-$HOME/.local/share}/konsole/`.
 
 ## Other Linux distributions
 

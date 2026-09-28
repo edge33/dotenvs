@@ -67,7 +67,7 @@ fi
 
 echo 'Installing Arch packages and fonts...'
 sudo pacman -S --needed --noconfirm \
-  base-devel fontconfig ttf-jetbrains-mono ttf-dejavu ttf-liberation \
+  base-devel fontconfig konsole ttf-jetbrains-mono ttf-dejavu ttf-liberation \
   noto-fonts noto-fonts-emoji
 
 if ! command -v yay >/dev/null 2>&1; then
@@ -101,15 +101,20 @@ done
 
 install_config "$repo_dir/.config/fontconfig/fonts.conf" "$HOME/.config/fontconfig/fonts.conf"
 install_config "$repo_dir/.config/Code/User/settings.json" "$HOME/.config/Code/User/settings.json"
+install_config "$repo_dir/.local/share/konsole/SolarizedDark.profile" \
+  "${XDG_DATA_HOME:-$HOME/.local/share}/konsole/SolarizedDark.profile"
 fc-cache
 
-if command -v plasmashell >/dev/null 2>&1; then
-  if ! command -v kwriteconfig6 >/dev/null 2>&1 ||
-     ! command -v kreadconfig6 >/dev/null 2>&1; then
-    echo 'Plasma is installed, but kwriteconfig6 or kreadconfig6 is missing.' >&2
-    exit 1
-  fi
+if ! command -v kwriteconfig6 >/dev/null 2>&1 ||
+   ! command -v kreadconfig6 >/dev/null 2>&1; then
+  echo 'Konsole requires kwriteconfig6 and kreadconfig6 to set its default profile.' >&2
+  exit 1
+fi
+if [[ $(kreadconfig6 --file konsolerc --group 'Desktop Entry' --key DefaultProfile) != SolarizedDark.profile ]]; then
+  kwriteconfig6 --file konsolerc --group 'Desktop Entry' --key DefaultProfile SolarizedDark.profile
+fi
 
+if command -v plasmashell >/dev/null 2>&1; then
   set_kde_font() {
     local group=$1 key=$2 family=$3 size=$4 current desired
     current=$(kreadconfig6 --file kdeglobals --group "$group" --key "$key")
