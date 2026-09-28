@@ -20,6 +20,10 @@ The script copies `.zshrc`, `.zimrc`, `.p10k.zsh`, `.config/fontconfig/fonts.con
 
 The script installs `visual-studio-code-bin` and `apple-fonts` from the AUR. Review their PKGBUILDs before running it if you want to inspect third party packages.
 
+## KDE Plasma fonts
+
+On Plasma 6, the script uses `kreadconfig6` and `kwriteconfig6` to set the [KDE font groups](https://github.com/KDE/plasma-workspace/blob/master/kcms/fonts/fontssettings.kcfg) in `~/.config/kdeglobals`. General, menu, toolbar, and small text use SF Pro Text; window titles use SF Pro Display; fixed-width text uses JetBrains Mono. Existing sizes and styles are retained. The fontconfig file handles serif and emoji preferences. Log out and back in to apply changes to the Plasma session. The script skips this step when Plasma is not installed.
+
 ## Other Linux distributions
 
 Install Zsh, Git, curl, Node.js via [nvm](https://github.com/nvm-sh/nvm), Zim, and Powerlevel10k for your distribution. Copy `.zshrc`, `.zimrc`, and `.p10k.zsh` to your home directory, `.config/fontconfig/fonts.conf` and `.config/Code/User/settings.json` to the same paths under your home directory.

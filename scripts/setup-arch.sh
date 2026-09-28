@@ -102,6 +102,36 @@ done
 install_config "$repo_dir/.config/fontconfig/fonts.conf" "$HOME/.config/fontconfig/fonts.conf"
 install_config "$repo_dir/.config/Code/User/settings.json" "$HOME/.config/Code/User/settings.json"
 fc-cache
+
+if command -v plasmashell >/dev/null 2>&1; then
+  if ! command -v kwriteconfig6 >/dev/null 2>&1 ||
+     ! command -v kreadconfig6 >/dev/null 2>&1; then
+    echo 'Plasma is installed, but kwriteconfig6 or kreadconfig6 is missing.' >&2
+    exit 1
+  fi
+
+  set_kde_font() {
+    local group=$1 key=$2 family=$3 size=$4 current desired
+    current=$(kreadconfig6 --file kdeglobals --group "$group" --key "$key")
+    if [[ $current == *,* ]]; then
+      desired="$family,${current#*,}"
+    else
+      desired="$family,$size,-1,5,50,0,0,0,0,0"
+    fi
+    if [[ $current != "$desired" ]]; then
+      kwriteconfig6 --file kdeglobals --group "$group" --key "$key" "$desired"
+    fi
+  }
+
+  echo 'Configuring KDE Plasma fonts...'
+  set_kde_font General font 'SF Pro Text' 10
+  set_kde_font General fixed 'JetBrains Mono' 10
+  set_kde_font General smallestReadableFont 'SF Pro Text' 8
+  set_kde_font General toolBarFont 'SF Pro Text' 10
+  set_kde_font General menuFont 'SF Pro Text' 10
+  set_kde_font WM activeFont 'SF Pro Display' 10
+fi
+
 code --install-extension pkief.material-icon-theme
 code --install-extension biomejs.biome
 
