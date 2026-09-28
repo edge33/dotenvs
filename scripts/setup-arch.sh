@@ -31,7 +31,7 @@ install_config() {
 echo 'Installing Arch packages and fonts...'
 sudo pacman -Syu --needed --noconfirm \
   git base-devel curl zsh fontconfig \
-  ttf-jetbrains-mono ttf-dejavu ttf-liberation noto-fonts
+  ttf-jetbrains-mono ttf-dejavu ttf-liberation noto-fonts noto-fonts-emoji
 
 echo 'Installing nvm and Node.js LTS...'
 if [[ ! -s $nvm_dir/nvm.sh ]]; then
@@ -76,9 +76,9 @@ echo 'Installing shell, font, and editor configuration...'
 install_config "$repo_dir/.zshrc" "$HOME/.zshrc"
 install_config "$repo_dir/.zimrc" "$HOME/.zimrc"
 install_config "$repo_dir/.p10k.zsh" "$HOME/.p10k.zsh"
-install_config "$repo_dir/fonts/fonts.conf" "$HOME/.config/fontconfig/fonts.conf"
+install_config "$repo_dir/.config/fontconfig/fonts.conf" "$HOME/.config/fontconfig/fonts.conf"
 install_config "$repo_dir/vscode/settings.json" "$HOME/.config/Code/User/settings.json"
-fc-cache -f "$font_dir"
+fc-cache -f
 
 # Starting Zsh runs the Zim bootstrap in .zshrc and installs its modules.
 zsh -ic 'zimfw install'
