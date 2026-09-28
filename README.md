@@ -12,11 +12,11 @@ cd dotenvs
 bash scripts/setup-arch.sh
 ```
 
-If Git is not available yet, install it first with `sudo pacman -S git`. The script installs or updates Git, build tools, curl, Zsh, fontconfig, the Arch font packages, nvm, the latest Node.js LTS, yay, Apple fonts, and Visual Studio Code. It makes the latest LTS line the default for new shells, installs Zim and its modules including Powerlevel10k, installs the Material Icon Theme and Biome extensions, and sets Zsh as the login shell.
+Git is required to clone the repository; if it is not available yet, install it first with `sudo pacman -S git`. The script installs curl and Zsh and sets up Zim first, then installs build tools, fontconfig, the Arch font packages, nvm v0.40.8 with the latest Node.js LTS, yay, Apple fonts, and Visual Studio Code. It makes the latest LTS line the default for new shells, installs the Material Icon Theme and Biome extensions, and sets Zsh as the login shell.
 
 The Arch fonts are `ttf-jetbrains-mono`, `ttf-dejavu`, `ttf-liberation`, `noto-fonts`, and `noto-fonts-emoji` from the official repositories, plus `apple-fonts` from the AUR. The script also downloads all four [MesloLGS NF font files](https://github.com/romkatv/powerlevel10k-media) used by Powerlevel10k and the VS Code terminal. Configure any other terminal app to use `MesloLGS NF`.
 
-The script copies `.zshrc`, `.zimrc`, `.p10k.zsh`, `.config/fontconfig/fonts.conf`, and `.config/Code/User/settings.json` to your home configuration. It backs up differing existing files under `~/.local/share/dotenvs-backups/` before replacing them. You can rerun the script after pulling updates.
+The script copies `.zshrc`, `.zimrc`, `.p10k.zsh`, `.config/fontconfig/fonts.conf`, and `.config/Code/User/settings.json` to your home configuration. nvm adds its own startup lines to `~/.zshrc`. The script backs up differing existing files under `~/.local/share/dotenvs-backups/` before replacing them and skips unchanged files on later runs. You can rerun it after pulling updates.
 
 The script installs `visual-studio-code-bin` and `apple-fonts` from the AUR. Review their PKGBUILDs before running it if you want to inspect third party packages.
 
