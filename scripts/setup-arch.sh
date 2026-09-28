@@ -77,12 +77,13 @@ install_config "$repo_dir/.zshrc" "$HOME/.zshrc"
 install_config "$repo_dir/.zimrc" "$HOME/.zimrc"
 install_config "$repo_dir/.p10k.zsh" "$HOME/.p10k.zsh"
 install_config "$repo_dir/.config/fontconfig/fonts.conf" "$HOME/.config/fontconfig/fonts.conf"
-install_config "$repo_dir/vscode/settings.json" "$HOME/.config/Code/User/settings.json"
+install_config "$repo_dir/.config/Code/User/settings.json" "$HOME/.config/Code/User/settings.json"
 fc-cache -f
 
 # Starting Zsh runs the Zim bootstrap in .zshrc and installs its modules.
 zsh -ic 'zimfw install'
 code --install-extension pkief.material-icon-theme --force
+code --install-extension biomejs.biome --force
 
 current_user=$(id -un)
 if [[ $(getent passwd "$current_user" | cut -d: -f7) != "$(command -v zsh)" ]]; then
