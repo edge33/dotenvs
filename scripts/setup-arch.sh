@@ -6,8 +6,13 @@ if [[ $EUID -eq 0 ]]; then
   exit 1
 fi
 
-if [[ ! -r /etc/os-release ]] || ! grep -qx 'ID=arch' /etc/os-release; then
-  echo 'This setup script requires Arch Linux.' >&2
+if [[ ! -r /etc/os-release ]]; then
+  echo 'This setup script requires Arch Linux or CachyOS.' >&2
+  exit 1
+fi
+source /etc/os-release
+if [[ ${ID:-} != arch && ${ID:-} != cachyos ]]; then
+  echo 'This setup script requires Arch Linux or CachyOS.' >&2
   exit 1
 fi
 
@@ -65,7 +70,7 @@ if [[ ! -r $NVM_DIR/alias/default ]] || [[ $(<"$NVM_DIR/alias/default") != 'lts/
   nvm alias default 'lts/*'
 fi
 
-echo 'Installing Arch packages and fonts...'
+echo 'Installing system packages and fonts...'
 sudo pacman -S --needed --noconfirm \
   base-devel docker docker-compose fontconfig github-cli konsole openssh \
   ttf-jetbrains-mono ttf-dejavu ttf-liberation \

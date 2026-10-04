@@ -2,7 +2,7 @@
 
 My Linux shell, font, terminal, and VS Code configuration.
 
-## New Arch installation
+## New Arch Linux or CachyOS installation
 
 Clone this repository and run the setup script as your regular user with sudo access:
 
@@ -12,9 +12,9 @@ cd dotenvs
 bash scripts/setup-arch.sh
 ```
 
-Git is required to clone the repository; if it is not available yet, install it first with `sudo pacman -S git`. The script installs curl and Zsh, switches its own execution to Zsh, and sets up Zim. It then clones nvm v0.40.8 into `~/.nvm`, installs the latest Node.js LTS, and makes that LTS line the default for new shells. It also installs build tools, fontconfig, the Arch font packages, Docker, Docker Compose, paru, Apple fonts, Konsole, Visual Studio Code, GitHub CLI, OpenSSH, and the Material Icon Theme and Biome extensions. Zsh becomes the login shell.
+Git is required to clone the repository; if it is not available yet, install it first with `sudo pacman -S git`. The script supports Arch Linux and CachyOS. It installs curl and Zsh, switches its own execution to Zsh, and sets up Zim. It then clones nvm v0.40.8 into `~/.nvm`, installs the latest Node.js LTS, and makes that LTS line the default for new shells. It also installs build tools, fontconfig, the shared pacman font packages, Docker, Docker Compose, paru, Apple fonts, Konsole, Visual Studio Code, GitHub CLI, OpenSSH, and the Material Icon Theme and Biome extensions. Zsh becomes the login shell.
 
-The Arch fonts are `ttf-jetbrains-mono`, `ttf-dejavu`, `ttf-liberation`, `noto-fonts`, and `noto-fonts-emoji` from the official repositories, plus `apple-fonts` from the AUR. The script also downloads all four [MesloLGS NF font files](https://github.com/romkatv/powerlevel10k-media) used by Powerlevel10k and the VS Code terminal. Configure any other terminal app to use `MesloLGS NF`.
+The pacman fonts are `ttf-jetbrains-mono`, `ttf-dejavu`, `ttf-liberation`, `noto-fonts`, and `noto-fonts-emoji` from the configured repositories, plus `apple-fonts` from the AUR. The script also downloads all four [MesloLGS NF font files](https://github.com/romkatv/powerlevel10k-media) used by Powerlevel10k and the VS Code terminal. Configure any other terminal app to use `MesloLGS NF`.
 
 The script copies `.zshrc`, `.zimrc`, `.p10k.zsh`, `.config/fontconfig/fonts.conf`, `.config/Code/User/settings.json`, and `.local/share/konsole/SolarizedDark.profile` to your home configuration. The versioned `.zshrc` loads nvm from `~/.nvm`. The script backs up differing existing files under `~/.local/share/dotenvs-backups/` before replacing them and skips unchanged files on later runs. You can rerun it after pulling updates.
 
