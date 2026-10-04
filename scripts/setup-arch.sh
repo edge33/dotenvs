@@ -152,4 +152,11 @@ code --install-extension pkief.material-icon-theme
 code --install-extension biomejs.biome
 bash "$repo_dir/scripts/setup-github-ssh.sh"
 
-echo 'Arch development setup complete. Log out and back in to use Zsh and Docker without sudo.'
+echo 'Arch development setup complete.'
+if ! id -nG | tr ' ' '\n' | grep -qx docker; then
+  if [[ -t 0 && -t 1 ]]; then
+    echo 'Opening a new shell with Docker group access. Type exit to return to your original shell.'
+    exec newgrp docker
+  fi
+  echo 'Run newgrp docker in your terminal to use Docker without sudo now.'
+fi
