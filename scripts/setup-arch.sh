@@ -78,7 +78,8 @@ fi
 if ! id -nG "$current_user" | tr ' ' '\n' | grep -qx docker; then
   sudo usermod -aG docker "$current_user"
 fi
-sudo systemctl enable --now docker.service
+sudo systemctl disable docker.service
+sudo systemctl enable --now docker.socket
 
 if ! command -v paru >/dev/null 2>&1; then
   echo 'Installing paru...'

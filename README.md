@@ -22,7 +22,7 @@ The script installs `visual-studio-code-bin` and `apple-fonts` from the AUR via 
 
 ## Docker
 
-The script installs `docker` and `docker-compose`, enables `docker.service`, and adds the current user to the `docker` group. Log out of the desktop session and back in before running `docker` or `docker compose` without `sudo`. Membership in the `docker` group grants root-level access to the host through Docker.
+The script installs `docker` and `docker-compose`, disables automatic startup of `docker.service`, enables `docker.socket`, and adds the current user to the `docker` group. Docker starts when a client connects to its socket. If Docker is already running when you rerun the script, it stays running until stopped or rebooted. Log out of the desktop session and back in before running `docker` or `docker compose` without `sudo`. Membership in the `docker` group grants root-level access to the host through Docker.
 
 ## GitHub SSH authentication
 
