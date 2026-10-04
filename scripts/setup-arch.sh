@@ -67,21 +67,31 @@ fi
 
 echo 'Installing Arch packages and fonts...'
 sudo pacman -S --needed --noconfirm \
-  base-devel fontconfig konsole ttf-jetbrains-mono ttf-dejavu ttf-liberation \
+  base-devel docker docker-compose fontconfig github-cli konsole openssh \
+  ttf-jetbrains-mono ttf-dejavu ttf-liberation \
   noto-fonts noto-fonts-emoji
 
-if ! command -v yay >/dev/null 2>&1; then
-  echo 'Installing yay...'
-  yay_build_dir=$(mktemp -d)
-  trap 'rm -rf -- "$yay_build_dir"' EXIT
-  git clone https://aur.archlinux.org/yay.git "$yay_build_dir/yay"
-  (cd "$yay_build_dir/yay" && makepkg -si --noconfirm)
-  rm -rf -- "$yay_build_dir"
+echo 'Enabling Docker for the current user...'
+if ! getent group docker >/dev/null; then
+  sudo groupadd docker
+fi
+if ! id -nG "$current_user" | tr ' ' '\n' | grep -qx docker; then
+  sudo usermod -aG docker "$current_user"
+fi
+sudo systemctl enable --now docker.service
+
+if ! command -v paru >/dev/null 2>&1; then
+  echo 'Installing paru...'
+  paru_build_dir=$(mktemp -d)
+  trap 'rm -rf -- "$paru_build_dir"' EXIT
+  git clone https://aur.archlinux.org/paru.git "$paru_build_dir/paru"
+  (cd "$paru_build_dir/paru" && makepkg -si --noconfirm)
+  rm -rf -- "$paru_build_dir"
   trap - EXIT
 fi
 
 echo 'Installing AUR fonts and Visual Studio Code...'
-yay -S --needed --noconfirm apple-fonts visual-studio-code-bin
+paru -S --needed --noconfirm apple-fonts visual-studio-code-bin
 
 mkdir -p "$font_dir"
 for style in 'Regular' 'Bold' 'Italic' 'Bold Italic'; do
@@ -139,5 +149,6 @@ fi
 
 code --install-extension pkief.material-icon-theme
 code --install-extension biomejs.biome
+bash "$repo_dir/scripts/setup-github-ssh.sh"
 
-echo 'Arch development setup complete. Open a new terminal to use Zsh and Node.js LTS.'
+echo 'Arch development setup complete. Log out and back in to use Zsh and Docker without sudo.'
