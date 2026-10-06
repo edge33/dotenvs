@@ -88,12 +88,18 @@ sudo systemctl enable --now docker.socket
 
 if ! command -v paru >/dev/null 2>&1; then
   echo 'Installing paru...'
-  paru_build_dir=$(mktemp -d)
-  trap 'rm -rf -- "$paru_build_dir"' EXIT
-  git clone https://aur.archlinux.org/paru.git "$paru_build_dir/paru"
-  (cd "$paru_build_dir/paru" && makepkg -si --noconfirm)
-  rm -rf -- "$paru_build_dir"
-  trap - EXIT
+  if [[ ${ID:-} == cachyos ]]; then
+    sudo pacman -Sy paru --noconfirm
+  else if [[ ${ID:-} == arch ]]; then
+    echo 'Building paru from sources.' >&2
+    paru_build_dir=$(mktemp -d)
+    trap 'rm -rf -- "$paru_build_dir"' EXIT
+    git clone https://aur.archlinux.org/paru.git "$paru_build_dir/paru"
+    (cd "$paru_build_dir/paru" && makepkg -si)
+    rm -rf -- "$paru_build_dir"
+    trap - EXIT
+    fi
+  fi
 fi
 
 echo 'Installing AUR fonts and Visual Studio Code...'
